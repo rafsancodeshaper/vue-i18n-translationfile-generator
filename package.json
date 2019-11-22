@@ -1,0 +1,21 @@
+{
+  "name": "vue-i18n-translationfile-generator",
+  "version": "1.0.0",
+  "description": "Generates a json file with structure equal to the translation path in a Vue element",
+  "keywords": [
+    "vue",
+    "i18n",
+    "generator",
+    "json",
+    "translation"
+  ],
+  "main": "index.js",
+  "scripts": {
+    "test": "node .\\index.js --vueFile=test/start.vue --i18nDir=test/i18n --locale=nl-be "
+  },
+  "author": "Maarten De Muynck",
+  "license": "ISC",
+  "dependencies": {
+    "object-path": "^0.11.4"
+  }
+}
