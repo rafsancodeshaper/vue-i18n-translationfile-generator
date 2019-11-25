@@ -2,24 +2,26 @@ var fs = require('fs'),
     path = require('path'),
     objectPath = require('object-path')
 
-for (var arg of process.argv) {
-    var match = arg.match(/--(.*)=(.*)/);
-    if (match) {
-        var pKey = match[1];
-        var pVal = match[2];
-        if (pKey == "vueFile") {
-            vueComponentFilePath = path.join(__dirname, pVal);
-        } else if (pKey == "locale") {
-            translationDirPath = path.join(i18nDir, pVal)
-            translationFileName = 'index.js';
-            translationFilePath = path.join(translationDirPath, translationFileName);
-        } else if (pKey = "i18nDir") {
-            i18nDir = path.join(__dirname, pVal);
+function main(args) {
+    for (var arg of args) {
+        var match = arg.match(/--(.*)=(.*)/);
+        if (match) {
+            var pKey = match[1];
+            var pVal = match[2];
+            if (pKey == "vueFile") {
+                vueComponentFilePath = path.join(__dirname, pVal);
+            } else if (pKey == "locale") {
+                translationDirPath = path.join(i18nDir, pVal)
+                translationFileName = 'index.js';
+                translationFilePath = path.join(translationDirPath, translationFileName);
+            } else if (pKey = "i18nDir") {
+                i18nDir = path.join(__dirname, pVal);
+            }
         }
     }
-}
 
-updateTranslations();
+    updateTranslations();
+}
 
 function updateTranslations() {
 
@@ -97,4 +99,8 @@ function _writeUpdates(translations) {
         });
     })
     return writeUpdatesPromise;
+}
+
+exports.createTranslationFile = function (args) {
+    main(args);
 }
