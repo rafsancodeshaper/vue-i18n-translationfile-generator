@@ -10,4 +10,8 @@ export default {
    lblU1: 'lblU1',
   },
  },
+ pCalculator: {
+  btnEmailOffer: 'btnEmailOffer',
+  btnContinue: 'btnContinue',
+ },
 }

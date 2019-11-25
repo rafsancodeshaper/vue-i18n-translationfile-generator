@@ -63,6 +63,7 @@ function _readTranslationFile() {
 
 function _extractJSON(str) {
     var json = str.match(/\{.*\}/gs);
+
     return JSON5.parse(json);
 }
 
@@ -70,7 +71,7 @@ function _updateTranslations(translations) {
     var updatedTranslationsPromise = new Promise(function (resolve, reject) {
         fs.readFile(vueComponentFilePath, { encoding: 'utf-8' }, function (err, vueComponentdata) {
             if (!err) {
-                var matches = vueComponentdata.match(/\$t\(\'.*\'\)/g);
+                var matches = vueComponentdata.match(/\$t\(\'.*?\'\)/g);
                 for (var match of matches) {
                     var path = match.replace("$t(\'", "").replace("')", "");
                     var keys = path.split('.');
