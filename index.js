@@ -1,21 +1,23 @@
 var fs = require('fs'),
     path = require('path'),
     objectPath = require('object-path')
+JSON5 = require('json5')
 
 function main(args) {
     for (var arg of args) {
         var match = arg.match(/--(.*)=(.*)/);
+        var cwd = process.cwd();
         if (match) {
             var pKey = match[1];
             var pVal = match[2];
             if (pKey == "vueFile") {
-                vueComponentFilePath = path.join(__dirname, pVal);
+                vueComponentFilePath = path.join(cwd, pVal);
             } else if (pKey == "locale") {
                 translationDirPath = path.join(i18nDir, pVal)
                 translationFileName = 'index.js';
                 translationFilePath = path.join(translationDirPath, translationFileName);
             } else if (pKey = "i18nDir") {
-                i18nDir = path.join(__dirname, pVal);
+                i18nDir = path.join(cwd, pVal);
             }
         }
     }
@@ -61,7 +63,7 @@ function _readTranslationFile() {
 
 function _extractJSON(str) {
     var json = str.match(/\{.*\}/gs);
-    return JSON.parse(json);
+    return JSON5.parse(json);
 }
 
 function _updateTranslations(translations) {
@@ -85,7 +87,7 @@ function _updateTranslations(translations) {
 
 function _writeUpdates(translations) {
     var writeUpdatesPromise = new Promise(function (resolve, reject) {
-        var outputStr = "export default " + JSON.stringify(translations, null, 1);
+        var outputStr = "export default " + JSON5.stringify(translations, null, 1);
         console.log("dir: ", translationDirPath)
         fs.mkdir(translationDirPath, { recursive: true }, (err) => {
 
