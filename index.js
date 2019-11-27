@@ -1,8 +1,10 @@
 var fs = require('fs'),
+    readDirRecursive = require('fs-readdir-recursive'),
     path = require('path'),
-    objectPath = require('object-path')
-JSON5 = require('json5')
-readAll = true;
+    objectPath = require('object-path'),
+    JSON5 = require('json5'),
+    readAll = true,
+    vueComponentFilePath = "";
 
 function main(args) {
     var cwd = process.cwd();
@@ -51,7 +53,6 @@ function updateTranslations() {
 
 function _readTranslationFile() {
     var translationObjectPromise = new Promise(function (resolve, reject) {
-        console.log("translationFilePath: ", translationFilePath);
         var data = fs.readFile(translationFilePath, { encoding: 'utf-8' }, function (err, translationData) {
             var obj = {};
             if (err) {
@@ -81,7 +82,7 @@ function _extractJSON(str) {
 function _updateTranslationsForAll(translations) {
     var updateForAllPromise = new Promise(function (resolve, reject) {
         console.log("vueComponentFilePath: ", vueComponentFilePath);
-        var files = fs.readdirSync(vueComponentFilePath);
+        var files = readDirRecursive(vueComponentFilePath);
         for (var file of files) {
             if (file.match(/.*.vue/)) {
                 var filePath = path.join(vueComponentFilePath, file);
@@ -97,10 +98,12 @@ function _updateTranslations(vueComponentFilePath, translations) {
     var content = fs.readFileSync(vueComponentFilePath, { encoding: 'utf-8' });
 
     var matches = content.match(/\$t\(\'.*?\'\)/g);
-    for (var match of matches) {
-        var path = match.replace("$t(\'", "").replace("')", "");
-        var keys = path.split('.');
-        objectPath.set(translations, path, keys[keys.length - 1])
+    if (matches) {
+        for (var match of matches) {
+            var path = match.replace("$t(\'", "").replace("')", "");
+            var keys = path.split('.');
+            objectPath.set(translations, path, keys[keys.length - 1])
+        }
     }
     console.debug("file: ", vueComponentFilePath, "translations: ", translations);
     return translations;
