@@ -101,8 +101,12 @@ function _updateTranslations(vueComponentFilePath, translations) {
     if (matches) {
         for (var match of matches) {
             var path = match.replace("$t(\'", "").replace("')", "");
+            console.log('path: ', path);
             var keys = path.split('.');
-            objectPath.set(translations, path, keys[keys.length - 1])
+            var exists = objectPath.get(translations, path);
+            if (exists === undefined) {
+                objectPath.set(translations, path, keys[keys.length - 1])
+            }
         }
     }
     console.debug("file: ", vueComponentFilePath, "translations: ", translations);

@@ -1,5 +1,5 @@
 <template>
-  <div>no translations</div>
+  <div>{{ $t('start.vue') }}</div>
 </template>
 
 <script>
